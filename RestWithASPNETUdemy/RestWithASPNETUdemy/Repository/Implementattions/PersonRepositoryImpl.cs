@@ -2,16 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using RestWithASPNETUdemy.Business;
+using RestWithASPNETUdemy.Business.Implementattions;
 using RestWithASPNETUdemy.Model;
 using RestWithASPNETUdemy.Model.Context;
 
-namespace RestWithASPNETUdemy.Services.Implementattions
+namespace RestWithASPNETUdemy.Repository.Implementattions
 {
-    public class PersonServiceImpl : IPersonService
+    public class PersonRepositoryImpl : IPersonRepository
     {
         private MySQLContext _context;
 
-        public PersonServiceImpl(MySQLContext context)
+        public PersonRepositoryImpl(MySQLContext context)
         {
             _context = context;
         }
@@ -23,7 +25,7 @@ namespace RestWithASPNETUdemy.Services.Implementattions
                 _context.Add(person);
                 _context.SaveChanges();
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 throw ex;
             }
@@ -35,8 +37,11 @@ namespace RestWithASPNETUdemy.Services.Implementattions
             var result = _context.Persons.SingleOrDefault(p => p.Id.Equals(id));
             try
             {
-                if(result != null) _context.Persons.Remove(result);
-                _context.SaveChanges();
+                if (result != null)
+                {
+                    _context.Persons.Remove(result);
+                    _context.SaveChanges();
+                }
             }
             catch (Exception ex)
             {
@@ -58,20 +63,23 @@ namespace RestWithASPNETUdemy.Services.Implementattions
         {
             if (!Exist(person.Id)) return new Person();
 
-            var result = _context.Persons.SingleOrDefault(p => p.Id.Equals(person.Id));
-            try
+            var result = _context.Persons.SingleOrDefault(b => b.Id == person.Id);
+            if(result != null)
             {
-                _context.Entry(result).CurrentValues.SetValues(person);
-                _context.SaveChanges();
+                try
+                {
+                    _context.Entry(result).CurrentValues.SetValues(person);
+                    _context.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            return person;
+            return result;
         }
 
-        private bool Exist(long? id)
+        public bool Exist(long? id)
         {
             return _context.Persons.Any(p => p.Id.Equals(id));
         }
