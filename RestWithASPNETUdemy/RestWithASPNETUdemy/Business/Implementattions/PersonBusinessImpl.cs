@@ -41,6 +41,11 @@ namespace RestWithASPNETUdemy.Business.Implementattions
         {
             return _repository.Update(person);
         }
-        
+
+        public bool Exist(long id)
+        {
+            return _repository.Exist(id);
+        }
+
     }
 }

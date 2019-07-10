@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using RestWithASPNETUdemy.Business;
-using RestWithASPNETUdemy.Business.Implementattions;
 using RestWithASPNETUdemy.Model;
 using RestWithASPNETUdemy.Model.Context;
 
@@ -11,7 +8,7 @@ namespace RestWithASPNETUdemy.Repository.Implementattions
 {
     public class PersonRepositoryImpl : IPersonRepository
     {
-        private MySQLContext _context;
+        private readonly MySQLContext _context;
 
         public PersonRepositoryImpl(MySQLContext context)
         {
@@ -61,7 +58,7 @@ namespace RestWithASPNETUdemy.Repository.Implementattions
 
         public Person Update(Person person)
         {
-            if (!Exist(person.Id)) return new Person();
+            if (!Exist(person.Id)) return null;
 
             var result = _context.Persons.SingleOrDefault(b => b.Id == person.Id);
             if(result != null)

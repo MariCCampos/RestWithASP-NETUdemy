@@ -5,8 +5,7 @@ using RestWithASPNETUdemy.Business;
 namespace RestWithASPNETUdemy.Controllers
 {
     [ApiVersion("1")]
-    [Route("api/[controller]/v{version:apiVersion}")]
-    [ApiController]
+    [Route("api/[controller]")]
     public class PersonsController : Controller
     {
 
@@ -19,15 +18,15 @@ namespace RestWithASPNETUdemy.Controllers
 
 
         // GET api/values
-        [HttpGet]
+        [HttpGet("v1")]
         public IActionResult Get()
         {
             return Ok (_personBusiness.FindAll());
         }
 
         // GET api/values/5
-        [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        [HttpGet("v1/{id}")]
+        public IActionResult Get(long id)
         {
             var person = _personBusiness.FindById(id);
             if (person == null) return NotFound();
@@ -35,7 +34,7 @@ namespace RestWithASPNETUdemy.Controllers
         }
 
         // POST api/values
-        [HttpPost]
+        [HttpPost("v1")]
         public IActionResult Post([FromBody] Person person)
         {
             if (person == null) return BadRequest();
@@ -43,15 +42,17 @@ namespace RestWithASPNETUdemy.Controllers
         }
 
         // PUT api/values/5
-        [HttpPut("{id}")]
+        [HttpPut("v1")]
         public IActionResult Put([FromBody] Person person)
         {
             if (person == null) return BadRequest();
-            return new ObjectResult(_personBusiness.Update(person));
+            var updatedPerson = _personBusiness.Update(person);
+            if (updatedPerson == null) return BadRequest();
+            return new ObjectResult(updatedPerson);
         }
 
         // DELETE api/values/5
-        [HttpDelete("{id}")]
+        [HttpDelete("v1/{id}")]
         public IActionResult Delete(int id)
         {
             _personBusiness.Delete(id);
