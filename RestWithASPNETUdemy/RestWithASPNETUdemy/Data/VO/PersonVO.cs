@@ -1,14 +1,12 @@
-﻿using RestWithASPNETUdemy.Model.Base;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace RestWithASPNETUdemy.Model
+namespace RestWithASPNETUdemy.Data.VO
 {
-    public class Person : BaseEntity
+    public class PersonVO
     {
+        [Column("Id")]
+        public long? Id { get; set; }
+
         [Column("FirstName")]
         public string FirstName { get; set; }
 
